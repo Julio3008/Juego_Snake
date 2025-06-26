@@ -2,8 +2,8 @@
 
 Este juego de Snake está elaborado con HTML, CSS y JavaScript para proporcionar una experiencia de juego clásica con un diseño moderno.
 
-![Vista previa del juego Snake](https://i.imgur.com/MfXKPFq.png)
-![Vista previa del juego Snake - Game Over](https://i.imgur.com/3SJCHlI.png)
+![Snake Game](https://i.imgur.com/MfXKPFq.png)
+![Game Over](https://i.imgur.com/3SJCHlI.png)
 
 ## Características
 
