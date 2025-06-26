@@ -1,26 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Serpiente</title>
+    <title>Snake Game</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap"
       rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
     <link href="styles.css" rel="stylesheet" />
     <script src="script.js" type="text/javascript" defer></script>
   </head>
   <body>
-    <div id="board"></div>
-    <div class="boardInfo">
-      <div>
-        Puntuación:
-        <div id="scoreBoard"></div>
+    <header>
+      <h1>Snake Game <i class="fa-solid fa-snake"></i></h1>
+    </header>
+    <main>
+      <div id="board"></div>
+      <div class="boardInfo">
+        <div class="score-container">
+          <i class="fa-solid fa-apple-whole"></i>
+          Puntuación:
+          <div id="scoreBoard">0</div>
+        </div>
+        <button id="start"><i class="fa-solid fa-play"></i> Comenzar</button>
       </div>
-      <button id="start">Comenzar</button>
-    </div>
-    <div id="gameOver">Juego terminado</div>
+      <div id="gameOver">¡Juego terminado!</div>
+    </main>
+    <footer>
+      <p>
+        Usa las teclas de dirección para mover la serpiente
+        <i class="fa-solid fa-arrow-up"></i>
+        <i class="fa-solid fa-arrow-down"></i>
+        <i class="fa-solid fa-arrow-left"></i>
+        <i class="fa-solid fa-arrow-right"></i>
+      </p>
+    </footer>
   </body>
 </html>

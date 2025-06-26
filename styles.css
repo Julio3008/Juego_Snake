@@ -1,0 +1,388 @@
+* {
+  font-family: "Share Tech Mono", monospace;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #1a1a2e;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  background-image: linear-gradient(to bottom, #1a1a2e, #0f3460);
+}
+
+header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+header h1 {
+  color: #e3e773;
+  font-size: 2.5rem;
+  text-shadow: 0 0 10px rgba(227, 231, 115, 0.5);
+}
+
+main {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+footer {
+  margin-top: 30px;
+  text-align: center;
+  color: #a0a0a0;
+  font-size: 0.9rem;
+}
+
+footer p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+footer i {
+  color: #55e7e7;
+}
+
+#board,
+.boardInfo {
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+#board {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  background-color: #e67e22;
+  background-image: linear-gradient(315deg, #e67e22 0%, #f39c12 74%);
+  border: 6px solid #d35400;
+  position: relative;
+}
+
+/* Campo con textura */
+#board::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50"><path d="M 0,50 L 0,48 L 2,46 L 4,48 L 6,46 L 8,48 L 10,46 L 12,48 L 14,46 L 16,48 L 18,46 L 20,48 L 22,46 L 24,48 L 26,46 L 28,48 L 30,46 L 32,48 L 34,46 L 36,48 L 38,46 L 40,48 L 42,46 L 44,48 L 46,46 L 48,48 L 50,50 Z" fill="%23f5b041" opacity="0.2"/></svg>');
+  pointer-events: none;
+  z-index: 1;
+}
+
+#start,
+.boardInfo {
+  font-size: 25px;
+}
+
+.score-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.score-container i {
+  color: #ff0000;
+  font-size: 1.3rem;
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
+}
+
+#gameOver {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(243, 90, 105, 0.9);
+  color: white;
+  padding: 20px 40px;
+  font-size: 40px;
+  border-radius: 10px;
+  z-index: 100;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.boardInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  background-color: #0f3460;
+  padding: 15px 20px;
+  border-radius: 8px;
+}
+
+#start {
+  background-color: #f35a69;
+  border: none;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#start i {
+  font-size: 0.9rem;
+}
+
+#start:hover {
+  background-color: #ff7885;
+  transform: translateY(-2px);
+}
+
+#start:disabled {
+  background-color: #9c3842;
+  cursor: not-allowed;
+  transform: none;
+}
+
+#scoreBoard {
+  display: inline-flex;
+  background-color: #162447;
+  padding: 5px 15px;
+  border-radius: 5px;
+  margin-left: 10px;
+  font-weight: bold;
+  color: #e3e773;
+}
+
+.square {
+  aspect-ratio: 1;
+  transition: background-color 0.1s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+
+.emptySquare {
+  background-color: transparent;
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+}
+
+/* Segmentos de la serpiente */
+.snakeSquare {
+  background-color: transparent;
+  border: none;
+  position: relative;
+}
+
+/* Cuerpo de la serpiente */
+.snakeSquare::before {
+  content: "";
+  position: absolute;
+  width: 90%;
+  height: 90%;
+  background-color: #4be34b;
+  border-radius: 40%;
+  box-shadow: 0 0 8px rgba(75, 227, 75, 0.7);
+  z-index: 2;
+}
+
+/* Cabeza de la serpiente - Estilos base */
+.snakeSquare.head-up::before,
+.snakeSquare.head-down::before,
+.snakeSquare.head-left::before,
+.snakeSquare.head-right::before {
+  content: "";
+  position: absolute;
+  width: 90%;
+  height: 90%;
+  background-color: #2aaa2a;
+  box-shadow: 0 0 10px rgba(75, 227, 75, 0.8);
+  z-index: 3;
+}
+
+/* Dirección hacia arriba */
+.snakeSquare.head-up::before {
+  border-radius: 50% 50% 40% 40%;
+}
+
+.snakeSquare.head-up::after {
+  content: "";
+  position: absolute;
+  width: 90%;
+  height: 90%;
+  background-image: radial-gradient(
+      circle at 35% 30%,
+      black 0,
+      black 12%,
+      transparent 12%
+    ),
+    radial-gradient(circle at 65% 30%, black 0, black 12%, transparent 12%);
+  z-index: 4;
+}
+
+/* Dirección hacia abajo */
+.snakeSquare.head-down::before {
+  border-radius: 40% 40% 50% 50%;
+}
+
+.snakeSquare.head-down::after {
+  content: "";
+  position: absolute;
+  width: 90%;
+  height: 90%;
+  background-image: radial-gradient(
+      circle at 35% 60%,
+      black 0,
+      black 12%,
+      transparent 12%
+    ),
+    radial-gradient(circle at 65% 60%, black 0, black 12%, transparent 12%);
+  z-index: 4;
+}
+
+/* Dirección hacia la izquierda */
+.snakeSquare.head-left::before {
+  border-radius: 50% 40% 40% 50%;
+}
+
+.snakeSquare.head-left::after {
+  content: "";
+  position: absolute;
+  width: 90%;
+  height: 90%;
+  background-image: radial-gradient(
+      circle at 30% 35%,
+      black 0,
+      black 12%,
+      transparent 12%
+    ),
+    radial-gradient(circle at 30% 65%, black 0, black 12%, transparent 12%);
+  z-index: 4;
+}
+
+/* Dirección hacia la derecha */
+.snakeSquare.head-right::before {
+  border-radius: 40% 50% 50% 40%;
+}
+
+.snakeSquare.head-right::after {
+  content: "";
+  position: absolute;
+  width: 90%;
+  height: 90%;
+  background-image: radial-gradient(
+      circle at 60% 35%,
+      black 0,
+      black 12%,
+      transparent 12%
+    ),
+    radial-gradient(circle at 60% 65%, black 0, black 12%, transparent 12%);
+  z-index: 4;
+}
+
+/* Lengua de la serpiente */
+.snakeSquare.head-right::before {
+  --tongue-color: #ff3333;
+  background-image: radial-gradient(
+    ellipse at 80% 50%,
+    var(--tongue-color) 0,
+    var(--tongue-color) 10%,
+    transparent 10%
+  );
+}
+
+/* Manzana */
+.foodSquare {
+  background-color: transparent;
+  border: none;
+  position: relative;
+}
+
+.foodSquare::before {
+  content: "";
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  background-color: #ff0000;
+  border-radius: 50% 50% 50% 50% / 55% 55% 45% 45%;
+  box-shadow: 0 0 8px rgba(255, 0, 0, 0.7);
+  z-index: 2;
+  animation: glow 1s infinite alternate;
+}
+
+/* Tallo de la manzana */
+.foodSquare::after {
+  content: "";
+  position: absolute;
+  width: 15%;
+  height: 15%;
+  top: 5%;
+  background-color: #734600;
+  border-radius: 0 50% 0 50%;
+  transform: rotate(45deg);
+  z-index: 3;
+}
+
+/* Hoja de la manzana */
+.foodSquare::before {
+  --leaf-color: #4caf50;
+  background-image: radial-gradient(
+    ellipse at 55% 5%,
+    var(--leaf-color) 0,
+    var(--leaf-color) 10%,
+    transparent 10%
+  );
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 8px rgba(255, 0, 0, 0.7);
+  }
+  to {
+    box-shadow: 0 0 16px rgba(255, 0, 0, 0.9);
+  }
+}
+
+@media (max-width: 600px) {
+  #board,
+  .boardInfo {
+    max-width: 95vw;
+  }
+
+  .boardInfo {
+    font-size: 20px;
+  }
+
+  #start {
+    font-size: 18px;
+  }
+
+  header h1 {
+    font-size: 2rem;
+  }
+}
